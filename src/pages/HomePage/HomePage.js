@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import Logoimg from "../../assets/images/Logoimg.jpg"
 
@@ -21,9 +22,11 @@ export default function HomePage() {
                     </BotaoLogin>
                 </form>
             </FormularioLogin>
-            <Cadastrar>
-                <h1>Não tem uma conta? Cadastre-se!</h1>
-            </Cadastrar>
+            <Link to={"/cadastro"}>
+                <Cadastrar>
+                    <h1>Não tem uma conta? Cadastre-se!</h1>
+                </Cadastrar>
+            </Link>
         </>
     )
 }
@@ -88,13 +91,15 @@ const BotaoLogin = styled.div`
         }
 `
 const Cadastrar = styled.div`
+        display: flex;
+        justify-content: center;
     h1 {
+        width: fit-content;
         font-family: 'Lexend Deca';
         font-style: normal;
         font-weight: 400;
         font-size: 13.976px;
         line-height: 17px;
-        text-align: center;
         text-decoration-line: underline;
         color: #52B6FF;
         &:hover {
