@@ -1,8 +1,39 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Logoimg from "../../assets/images/Logoimg.jpg"
 
 export default function HomePage() {
+
+    const [form, setForm] = useState({ email: "", password: "" });
+
+    const navigate = useNavigate();
+
+    function handleForm(e) {
+        const { name, value } = e.target;
+        setForm({ ...form, [name]: value })
+    }
+
+    function sendRegistration(e) {
+        e.preventDefault();
+
+        const body = {
+            ...form
+        }
+
+        console.log(body);
+
+        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body)
+
+        promise.then(() => {
+            navigate("/Habitos")
+        })
+
+        promise.catch(() => alert("Senha e/ou email incorretos. Tente novamente!"))
+    }
+
 
     return (
         <>
@@ -10,23 +41,38 @@ export default function HomePage() {
                 <img src={Logoimg} alt="Logo-Trackit" />
             </Logo>
             <FormularioLogin>
-                <form>
+                <form onSubmit={sendRegistration}>
                     <SessaoInputLogin>
-                        <input name="email" type="text" placeholder="email" required></input>
+                        <input
+                            name="email"
+                            type="text"
+                            value={form.email}
+                            onChange={handleForm}
+                            placeholder="email"
+                            required>
+                        </input>
                     </SessaoInputLogin>
                     <SessaoInputLogin>
-                        <input name="senha" type="text" placeholder="senha" required></input>
+                        <input
+                            name="password"
+                            type="text"
+                            value={form.password}
+                            onChange={handleForm}
+                            placeholder="senha"
+                            required>
+                        </input>
                     </SessaoInputLogin>
                     <BotaoLogin>
                         <button type="submit">Entrar</button>
                     </BotaoLogin>
                 </form>
             </FormularioLogin>
-            <Link to={"/cadastro"}>
-                <Cadastrar>
+            <Cadastrar>
+                <Link to={"/cadastro"}>
                     <h1>Não tem uma conta? Cadastre-se!</h1>
-                </Cadastrar>
-            </Link>
+                </Link>
+            </Cadastrar>
+
         </>
     )
 }
@@ -91,8 +137,8 @@ const BotaoLogin = styled.div`
         }
 `
 const Cadastrar = styled.div`
-        display: flex;
-        justify-content: center;
+         margin: auto;
+        width: fit-content;
     h1 {
         width: fit-content;
         font-family: 'Lexend Deca';

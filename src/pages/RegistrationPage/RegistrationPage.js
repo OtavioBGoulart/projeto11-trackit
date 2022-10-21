@@ -1,37 +1,97 @@
-import { Link } from "react-router-dom"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import Logoimg from "../../assets/images/Logoimg.jpg"
+import axios from "axios"
 
 export default function RegistrationPage() {
+
+    const [form, setForm] = useState({ email: "", name: "", image: "", password: "" });
+    const navigate = useNavigate();
+
+    function handleForm(e) {
+        const { name, value } = e.target;
+        setForm({ ...form, [name]: value })
+    }
+
+    function sendRegistration(e) {
+        e.preventDefault();
+
+        const body = {
+            ...form
+        }
+
+        console.log(body);
+
+        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", body)
+
+        promise.then(() => {
+            navigate("/")
+        })
+
+        promise.catch(() => alert("Erro ao fazer o cadastro"))
+    }
+
+
+
     return (
         <>
             <Logo>
                 <img src={Logoimg} alt="Logo-Trackit" />
             </Logo>
             <FormularioCadastro>
-                <form>
+                <form onSubmit={sendRegistration}>
                     <SessaoInputCadastro>
-                        <input name="email" type="text" placeholder="email" required></input>
+                        <input
+                            name="email"
+                            type="text"
+                            value={form.email}
+                            onChange={handleForm}
+                            placeholder="email"
+                            required>
+                        </input>
                     </SessaoInputCadastro>
                     <SessaoInputCadastro>
-                        <input name="senha" type="text" placeholder="senha" required></input>
+                        <input
+                            name="password"
+                            type="text"
+                            value={form.password}
+                            onChange={handleForm}
+                            placeholder="senha"
+                            required>
+                        </input>
                     </SessaoInputCadastro>
                     <SessaoInputCadastro>
-                        <input name="nome" type="text" placeholder="nome" required></input>
+                        <input
+                            name="name"
+                            type="text"
+                            value={form.name}
+                            onChange={handleForm}
+                            placeholder="nome"
+                            required>
+                        </input>
                     </SessaoInputCadastro>
                     <SessaoInputCadastro>
-                        <input name="foto" type="text" placeholder="foto" required></input>
+                        <input
+                            name="image"
+                            type="url"
+                            value={form.image}
+                            onChange={handleForm}
+                            placeholder="foto"
+                            required>
+                        </input>
                     </SessaoInputCadastro>
                     <BotaoCadastro>
                         <button type="submit">Cadastrar</button>
                     </BotaoCadastro>
                 </form>
             </FormularioCadastro>
-            <Link to={"/"}>
-                <Voltar>
+            <Voltar>
+                <Link to={"/"}>
                     <h1>Já tem uma conta? Faça login!</h1>
-                </Voltar>
-            </Link>
+                </Link>
+            </Voltar>
+
         </>
     )
 }
@@ -96,10 +156,9 @@ const BotaoCadastro = styled.div`
         }
 `
 const Voltar = styled.div`
-        display: flex;
-        justify-content: center;
-    h1 {
+        margin: auto;
         width: fit-content;
+    h1 {    
         font-family: 'Lexend Deca';
         font-style: normal;
         font-weight: 400;
